@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechFlow - Smart Productivity Suite</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  
+  <style>
+    :root {
+      --primary-color: #2a5ddb;
+      --secondary-color: #1a3d8f;
+      --accent-color: #00d4ff;
+      --dark-bg: #0a0f1e;
+      --light-text: #f8f9fa;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: rgba(10, 15, 30, 0.95) !important;
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-color) !important;
+    }
+
+    .nav-link {
+      color: var(--light-text) !important;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-color) !important;
+    }
+
+    .btn-primary-custom {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 25px;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .btn-primary-custom:hover {
+      background-color: var(--secondary-color);
+      box-shadow: 0 0 20px rgba(42, 93, 219, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 8rem 0 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 5rem 0;
+      background-color: #f8f9fa;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    /* Pricing Section */
+    .pricing-section {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 2px solid #e9ecef;
+      height: 100%;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--primary-color);
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(42, 93, 219, 0.2);
+    }
+
+    .pricing-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .pricing-badge {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .price {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 1rem 0;
+    }
+
+    .price-period {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+    }
+
+    .feature-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f1f1f1;
+    }
+
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-list i {
+      color: #28a745;
+      margin-right: 0.5rem;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 5rem 0;
+      background-color: var(--dark-bg);
+      color: white;
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3rem;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-control, .form-select {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.8rem;
+      border-radius: 10px;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent-color);
+      color: white;
+      box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #000;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .pricing-card.featured {
+        transform: scale(1);
+        margin-top: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="bi bi-lightning-charge-fill"></i> TechFlow</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link btn-primary-custom ms-2 px-3" href="#pricing">Get Started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content">
+          <h1 class="hero-title">Supercharge Your Productivity</h1>
+          <p class="hero-subtitle">The all-in-one platform that helps teams collaborate, manage projects, and achieve goals faster than ever.</p>
+          <div class="mt-4">
+            <a href="#pricing" class="btn btn-primary-custom btn-lg me-3">Start Free Trial</a>
+            <a href="#features" class="btn btn-outline-light btn-lg">Learn More</a>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center mt-5 mt-lg-0">
+          <i class="bi bi-laptop" style="font-size: 15rem; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-4 fw-bold">Powerful Features</h2>
+        <p class="lead text-muted">Everything you need to streamline your workflow</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-rocket-takeoff feature-icon"></i>
+              <h3 class="feature-title">Lightning Fast</h3>
+              <p class="text-muted">Experience blazing-fast performance with our optimized infrastructure built for speed.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-shield-check feature-icon"></i>
+              <h3 class="feature-title">Secure & Private</h3>
+              <p class="text-muted">Bank-level encryption and security protocols to keep your data safe and protected.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-people feature-icon"></i>
+              <h3 class="feature-title">Team Collaboration</h3>
+              <p class="text-muted">Real-time collaboration tools that bring your team together, wherever they are.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-graph-up-arrow feature-icon"></i>
+              <h3 class="feature-title">Analytics Dashboard</h3>
+              <p class="text-muted">Comprehensive insights and analytics to track progress and make data-driven decisions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-phone feature-icon"></i>
+              <h3 class="feature-title">Mobile Ready</h3>
+              <p class="text-muted">Access your workspace from any device with our responsive mobile apps.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card feature-card">
+            <div class="card-body text-center">
+              <i class="bi bi-puzzle feature-icon"></i>
+              <h3 class="feature-title">Integrations</h3>
+              <p class="text-muted">Connect with 100+ tools and services you already use every day.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="pricing-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-4 fw-bold">Simple, Transparent Pricing</h2>
+        <p class="lead text-muted">Choose the perfect plan for your needs</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Basic Plan -->
+        <div class="col-lg-4">
+          <div class="card pricing-card">
+            <div class="card-body text-center">
+              <h3 class="h4 mb-3">Starter</h3>
+              <div class="price">$9<span class="price-period">/month</span></div>
+              <p class="text-muted mb-4">Perfect for individuals</p>
+              
+              <ul class="feature-list text-start">
+                <li><i class="bi bi-check-circle-fill"></i> Up to 5 projects</li>
+                <li><i class="bi bi-check-circle-fill"></i> 10GB storage</li>
+                <li><i class="bi bi-check-circle-fill"></i> Basic analytics</li>
+                <li><i class="bi bi-check-circle-fill"></i> Email support</li>
+                <li><i class="bi bi-check-circle-fill"></i> Mobile app access</li>
+              </ul>
+
+              <button class="btn btn-outline-primary w-100 mt-3">Get Started</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professional Plan (Featured) -->
+        <div class="col-lg-4">
+          <div class="card pricing-card featured">
+            <div class="card-body text-center">
+              <span class="pricing-badge">Most Popular</span>
+              <h3 class="h4 mb-3">Professional</h3>
+              <div class="price">$29<span class="price-period">/month</span></div>
+              <p class="text-muted mb-4">For growing teams</p>
+              
+              <ul class="feature-list text-start">
+                <li><i class="bi bi-check-circle-fill"></i> Unlimited projects</li>
+                <li><i class="bi bi-check-circle-fill"></i> 100GB storage</li>
+                <li><i class="bi bi-check-circle-fill"></i> Advanced analytics</li>
+                <li><i class="bi bi-check-circle-fill"></i> Priority support</li>
+                <li><i class="bi bi-check-circle-fill"></i> Team collaboration</li>
+                <li><i class="bi bi-check-circle-fill"></i> Custom integrations</li>
+              </ul>
+
+              <button class="btn btn-primary-custom w-100 mt-3">Get Started</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="col-lg-4">
+          <div class="card pricing-card">
+            <div class="card-body text-center">
+              <h3 class="h4 mb-3">Enterprise</h3>
+              <div class="price">$99<span class="price-period">/month</span></div>
+              <p class="text-muted mb-4">For large organizations</p>
+              
+              <ul class="feature-list text-start">
+                <li><i class="bi bi-check-circle-fill"></i> Everything in Pro</li>
+                <li><i class="bi bi-check-circle-fill"></i> Unlimited storage</li>
+                <li><i class="bi bi-check-circle-fill"></i> Custom analytics</li>
+                <li><i class="bi bi-check-circle-fill"></i> 24/7 phone support</li>
+                <li><i class="bi bi-check-circle-fill"></i> Dedicated account manager</li>
+                <li><i class="bi bi-check-circle-fill"></i> Advanced security features</li>
+              </ul>
+
+              <button class="btn btn-outline-primary w-100 mt-3">Contact Sales</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold">Get In Touch</h2>
+            <p class="lead">Have questions? We'd love to hear from you.</p>
+          </div>
+
+          <form class="contact-form">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="John" required>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="phone" placeholder="+1 (555) 123-4567">
+              </div>
+              <div class="col-12">
+                <label for="subject" class="form-label">Subject</label>
+                <select class="form-select" id="subject" required>
+                  <option value="">Choose...</option>
+                  <option value="general">General Inquiry</option>
+                  <option value="sales">Sales Question</option>
+                  <option value="support">Technical Support</option>
+                  <option value="feedback">Feedback</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" rows="5" placeholder="Tell us how we can help..." required></textarea>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary-custom btn-lg w-100">
+                  <i class="bi bi-send me-2"></i>Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="social-links mb-3">
+        <a href="#"><i class="bi bi-twitter"></i></a>
+        <a href="#"><i class="bi bi-facebook"></i></a>
+        <a href="#"><i class="bi bi-linkedin"></i></a>
+        <a href="#"><i class="bi bi-instagram"></i></a>
+      </div>
+      <p class="mb-0">&copy; 2025 TechFlow. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Form submission handler
+    document.querySelector('.contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
