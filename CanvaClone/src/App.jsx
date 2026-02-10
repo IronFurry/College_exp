@@ -29,7 +29,7 @@ const App = () => {
         <Layer
           width={960}
           height={540}>
-          <Rect
+          <Circle
             ref={rectRef}
             x={100}
             y={100}
