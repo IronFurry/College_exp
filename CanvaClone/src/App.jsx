@@ -1,80 +1,151 @@
-import { Stage, Layer, Rect, Transformer } from "react-konva";
-import { useRef, useState, useEffect } from "react";
+import Editor from "@monaco-editor/react";
+import { useState } from "react";
+import "./App.css";
 
+const templates = {
+  python: `print("Hello, SlideShell!")`,
+  java: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, SlideShell!");
+    }
+}`,
+  c: `#include <stdio.h>
+
+int main() {
+    printf("Hello, SlideShell!\\n");
+    return 0;
+}`
+};
 
 const App = () => {
-  const [Selected, setSelected] = useState(false);
-  const rectRef = useRef(null);
-  const transformerRef = useRef(null)
+  const [code, setCode] = useState(templates.python);
+  const [lang, setLang] = useState("python");
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (Selected && rectRef.current && transformerRef.current) {
-      transformerRef.current.nodes([rectRef.current]);
-      transformerRef.current.getLayer().batchDraw();
+  const runCode = async () => {
+    try {
+      setLoading(true);
+      setOutput("Running...");
+
+      const response = await fetch("http://localhost:5000/run", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          code: code,
+          language: lang
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setOutput(data.output || "No output");
+
+    } catch (error) {
+      setOutput(`Error: ${error.message}\n\nMake sure the server is running on port 5000`);
+    } finally {
+      setLoading(false);
     }
-  }, [Selected]);
+  };
+
+  const changeLanguage = (language) => {
+    setLang(language);
+    setCode(templates[language]);
+  };
+
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Slide Editor</h2>
-      <Stage
-        width={960}
-        height={540}
-        style={{ background: "#fff" }}
-        onMouseDown={(e) => {
-          if (e.target === e.target.getStage()) {
-            setSelected(false)
-          }
-        }}
-      >
-        <Layer
-          width={960}
-          height={540}>
-          <Circle
-            ref={rectRef}
-            x={100}
-            y={100}
-            width={200}
-            height={120}
-            fill="#4f46e5"
-            draggable
-            stroke={Selected ? "#22c55e" : null}
-            strokeWidth={Selected ? 2 : 0}
-            onClick={() => setSelected(true)}
-            onTransformEnd={() => {
-              const node = rectRef.current;
+      <h2>SlideShell Compiler</h2>
 
-              const scaleX = node.scaleX();
-              const scaleY = node.scaleY();
+      <div style={{ marginBottom: "10px" }}>
+        <button
+          onClick={() => changeLanguage("python")}
+          disabled={loading}
+          style={{
+            background: lang === "python" ? "black" : "white",
+            color: lang === "python" ? "white" : "black",
+            padding: "8px 16px",
+            marginRight: "5px",
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1
+          }}
+        >
+          Python
+        </button>
 
-              // calculate new size
-              const newWidth = Math.max(20, node.width() * scaleX);
-              const newHeight = Math.max(20, node.height() * scaleY);
+        <button
+          onClick={() => changeLanguage("java")}
+          disabled={loading}
+          style={{
+            background: lang === "java" ? "black" : "white",
+            color: lang === "java" ? "white" : "black",
+            padding: "8px 16px",
+            marginRight: "5px",
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1
+          }}
+        >
+          Java
+        </button>
 
-              // apply new size
-              node.width(newWidth);
-              node.height(newHeight);
+        <button
+          onClick={() => changeLanguage("c")}
+          disabled={loading}
+          style={{
+            background: lang === "c" ? "black" : "white",
+            color: lang === "c" ? "white" : "black",
+            padding: "8px 16px",
+            marginRight: "5px",
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1
+          }}
+        >
+          C
+        </button>
 
-              // reset scale
-              node.scaleX(1);
-              node.scaleY(1);
-            }}
+        <button 
+          onClick={runCode}
+          disabled={loading}
+          style={{
+            background: "#28a745",
+            color: "white",
+            padding: "8px 16px",
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1
+          }}
+        >
+          {loading ? "Running..." : "Run"}
+        </button>
+      </div>
 
-            strokeScaleEnabled={false}
-          />
-
-          {Selected && (
-            <Transformer
-              ref={transformerRef}
-              rotateEnabled={true}
-              resizeEnabled={true}
-            />
-          )}
-
-
-        </Layer>
-      </Stage>
+      <Editor
+        height="60vh"
+        theme="vs-dark"
+        language={lang}
+        value={code}
+        onChange={(value) => setCode(value || "")}
+      />
+      
+      <div style={{
+        background: "#111",
+        color: "#0f0",
+        padding: "10px",
+        marginTop: "10px",
+        minHeight: "100px",
+        fontFamily: "monospace",
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word"
+      }}>
+        <strong>Output:</strong>
+        <pre style={{ margin: "5px 0 0 0" }}>{output}</pre>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
